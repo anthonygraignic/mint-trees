@@ -1,11 +1,39 @@
 <script>
+	import SvelteSeo from 'svelte-seo';
 	import PlantForm from '../lib/components/PlantForm.svelte';
+
+	const title = 'mint trees';
+	const description = 'Non fungible contributions for non fungible real trees';
 </script>
 
+<SvelteSeo
+	{title}
+	{description}
+	twitter={{
+		site: '@minttrees_dao',
+		title,
+		description,
+		image: 'https://mint-trees.pages.dev/favicon.png',
+		imageAlt: 'mint trees Logo'
+	}}
+	openGraph={{
+		title,
+		description,
+		url: 'https://mint-trees.pages.dev',
+		type: 'website',
+		images: [
+			{
+				url: 'https://mint-trees.pages.dev/favicon.png',
+				alt: 'mint trees Logo'
+			}
+		]
+	}}
+/>
+
 <main>
-    <div class="flex max-w-3xl justify-center mx-auto">
-        <PlantForm />
-    </div>
+	<div class="flex max-w-3xl justify-center mx-auto">
+		<PlantForm />
+	</div>
 
 	<!-- <button
 		type="button"

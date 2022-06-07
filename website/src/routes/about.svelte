@@ -1,3 +1,34 @@
+<script>
+	import SvelteSeo from 'svelte-seo';
+
+	const title = 'About | mint trees';
+	const description = 'Everything you need to know about mint trees';
+</script>
+
+<SvelteSeo
+	{title}
+	{description}
+	twitter={{
+		site: '@minttrees_dao',
+		title,
+		description,
+		image: 'https://mint-trees.pages.dev/favicon.png',
+		imageAlt: 'mint trees Logo'
+	}}
+	openGraph={{
+		title,
+		description,
+		url: 'https://mint-trees.pages.dev/about',
+		type: 'website',
+		images: [
+			{
+				url: 'https://mint-trees.pages.dev/favicon.png',
+				alt: 'mint trees Logo'
+			}
+		]
+	}}
+/>
+
 <main class="container">
 	<div class="flex">
 		<h1>about</h1>
