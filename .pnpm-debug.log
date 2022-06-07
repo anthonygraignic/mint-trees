@@ -1,0 +1,15 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_INIT_ARG",
+    "hint": "Maybe you wanted to run \"pnpm create svelte website\"",
+    "err": {
+      "name": "pnpm",
+      "message": "init command does not accept any arguments",
+      "code": "ERR_PNPM_INIT_ARG",
+      "stack": "pnpm: init command does not accept any arguments\n    at Object.handler [as init] (/home/anthony/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.1/node_modules/pnpm/dist/pnpm.cjs:173937:15)\n    at /home/anthony/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.1/node_modules/pnpm/dist/pnpm.cjs:176451:51\n    at async run (/home/anthony/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.1/node_modules/pnpm/dist/pnpm.cjs:176427:34)\n    at async runPnpm (/home/anthony/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.1/node_modules/pnpm/dist/pnpm.cjs:176645:5)\n    at async /home/anthony/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.1/node_modules/pnpm/dist/pnpm.cjs:176637:7"
+    }
+  }
+}
