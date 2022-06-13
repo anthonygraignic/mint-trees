@@ -64,7 +64,31 @@
 				href="/about"
 				sveltekit:prefetch
 				on:click={() => (navOpen = false)}
-				aria-current={segment.startsWith('/about') ? 'page' : undefined}>About</a
+				aria-current={segment.startsWith('/about') ? 'page' : undefined}>about</a
+			>
+			<a
+				href="/trees"
+				sveltekit:prefetch
+				on:click={() => (navOpen = false)}
+				aria-current={segment.startsWith('/trees') ? 'page' : undefined}>trees</a
+			>
+			<a
+				href="/integrate"
+				sveltekit:prefetch
+				on:click={() => (navOpen = false)}
+				aria-current={segment.startsWith('/integrate') ? 'page' : undefined}>integrate</a
+			>
+			<a
+				href="/swag"
+				sveltekit:prefetch
+				on:click={() => (navOpen = false)}
+				aria-current={segment.startsWith('/swag') ? 'page' : undefined}>swag</a
+			>
+			<a
+				href="/join"
+				sveltekit:prefetch
+				on:click={() => (navOpen = false)}
+				aria-current={segment.startsWith('/join') ? 'page' : undefined}>join</a
 			>
 			<!-- <a
 				href="/mint"
