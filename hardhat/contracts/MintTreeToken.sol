@@ -44,8 +44,16 @@ contract MintTreeToken is
         }
     }
 
-    modifier checkPrice(uint256 quantity) {
-        require(msg.value == treeEquivalentUnitPrice * quantity, "wrong price");
+    modifier mininalPrice(uint256 quantity) {
+        require(
+            msg.value >= treeEquivalentUnitPrice * quantity,
+            "Mint trees: below price"
+        );
+        _;
+    }
+
+    modifier onlyDao(uint256 quantity) {
+        require(msg.sender == dao, "Mint trees: caller is not the DAO");
         _;
     }
 
@@ -55,7 +63,7 @@ contract MintTreeToken is
     }
 
     /// @notice mint a tree
-    function mint(uint256 trees) external payable checkPrice(trees) {
+    function mint(uint256 trees) external payable mininalPrice(trees) {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _mint(msg.sender, tokenId);

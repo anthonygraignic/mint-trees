@@ -96,4 +96,29 @@ describe("Mint Trees", function () {
 
     expect(await mintTreeToken.balanceOf(addrs[0].address)).to.equal(1);
   });
+
+  it("Should mint: above price", async function () {
+    const mintTx = await mintTreeToken
+      .connect(addrs[0])
+      .mint(1, { value: ethers.utils.parseEther("0.2") });
+    // wait until the transaction is mined
+    await mintTx.wait();
+
+    expect(await mintTreeToken.balanceOf(addrs[0].address)).to.equal(1);
+  });
+
+  it("Should not mint: below price", async function () {
+    const mintTx = await mintTreeToken
+      .connect(addrs[0])
+      .mint(2, { value: ethers.utils.parseEther("0.02") });
+    // wait until the transaction is mined
+    await mintTx.wait();
+
+    expect(await mintTreeToken.balanceOf(addrs[0].address)).to.equal(1);
+    await expect(
+      mintTreeToken
+        .connect(addrs[0])
+        .mint(2000, { value: ethers.utils.parseEther("0.02") })
+    ).to.be.revertedWith("Mint trees: below price");
+  });
 });
