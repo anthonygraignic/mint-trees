@@ -23,7 +23,7 @@ contract MintTreeToken is
 
     Counters.Counter private _tokenIdCounter;
 
-    uint256 public treeEquivalentUnitPrice;
+    uint256 public unitPrice = 0.01 ether;
     /// @notice DAO address
     address public dao;
 
@@ -45,10 +45,7 @@ contract MintTreeToken is
     }
 
     modifier mininalPrice(uint256 quantity) {
-        require(
-            msg.value >= treeEquivalentUnitPrice * quantity,
-            "Mint trees: below price"
-        );
+        require(msg.value >= unitPrice * quantity, "Mint trees: below price");
         _;
     }
 
@@ -126,7 +123,7 @@ contract MintTreeToken is
         external
         onlyOwner
     {
-        treeEquivalentUnitPrice = newUnitPrice;
+        unitPrice = newUnitPrice;
     }
 
     /// @notice Allow owner to set the DAO address

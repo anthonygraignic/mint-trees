@@ -15,7 +15,11 @@ async function main() {
 
   // We get the contract to deploy
   const MintTreeToken = await ethers.getContractFactory("MintTreeToken");
-  const mintTreeToken = await MintTreeToken.deploy();
+  const mintTreeToken = await MintTreeToken.deploy(
+    process.env.CONTRACT_URI || "",
+    process.env.CONTRACT_OWNER || ethers.constants.AddressZero,
+    process.env.CONTRACT_DAO || ethers.constants.AddressZero
+  );
 
   await mintTreeToken.deployed();
 

@@ -1,6 +1,8 @@
 const { expect } = require("chai");
 const { ethers, network } = require("hardhat");
 
+// TODO migrate to TS
+
 describe("Deployment & Owner", function () {
   let MintTreeToken;
   let mintTreeToken;
