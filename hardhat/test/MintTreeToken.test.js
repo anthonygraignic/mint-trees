@@ -62,9 +62,7 @@ describe("Deployment & Owner", function () {
       .connect(owner)
       .setTreeEquivalentUnitPrice(ethers.utils.parseUnits("0.01", "ether"));
 
-    const price = await mintTreeToken
-      .connect(addrs[1])
-      .treeEquivalentUnitPrice();
+    const price = await mintTreeToken.unitPrice();
 
     expect(price).to.equal("10000000000000000");
   });
@@ -122,5 +120,56 @@ describe("Mint Trees", function () {
         .connect(addrs[0])
         .mint(2000, { value: ethers.utils.parseEther("0.02") })
     ).to.be.revertedWith("Mint trees: below price");
+  });
+
+  it("Should add project", async function () {
+    const projectContractAddress = "0xDef1C0ded9bec7F1a1670819833240f027b25EfF";
+    const receipt = await (
+      await mintTreeToken.connect(dao).addProject(projectContractAddress)
+    ).wait();
+
+    const projectAdded = receipt.events?.find(
+      (e) => e.event === "ProjectAdded"
+    );
+    expect(projectAdded?.args?.project).to.equal(projectContractAddress);
+    expect(
+      await mintTreeToken.availableProjects(projectContractAddress)
+    ).to.equal(true);
+    expect(
+      await mintTreeToken.isApprovedForAll(
+        addrs[1].address,
+        projectContractAddress
+      )
+    );
+  });
+
+  it("Should not add project: not DAO", async function () {
+    await expect(
+      mintTreeToken
+        .connect(addrs[0])
+        .addProject("0xDef1C0ded9bec7F1a1670819833240f027b25EfF")
+    ).to.be.revertedWith("Mint trees: caller is not the DAO");
+  });
+
+  it("Should remove project", async function () {
+    const projectContractAddress = "0xDef1C0ded9bec7F1a1670819833240f027b25EfF";
+    const receipt = await (
+      await mintTreeToken.connect(dao).removeProject(projectContractAddress)
+    ).wait();
+
+    const projectRemoved = receipt.events?.find(
+      (e) => e.event === "ProjectRemoved"
+    );
+    expect(projectRemoved?.args?.project).to.equal(projectContractAddress);
+    expect(
+      await mintTreeToken.availableProjects(projectContractAddress)
+    ).to.equal(false);
+  });
+  it("Should not remove project: not DAO", async function () {
+    await expect(
+      mintTreeToken
+        .connect(addrs[0])
+        .removeProject("0xDef1C0ded9bec7F1a1670819833240f027b25EfF")
+    ).to.be.revertedWith("Mint trees: caller is not the DAO");
   });
 });

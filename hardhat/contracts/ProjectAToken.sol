@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/draft-ERC721Votes.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IProjectToken.sol";
+import "./interfaces/IMintTreeToken.sol";
 
 contract ProjectAToken is
     IProjectToken,
@@ -19,14 +20,21 @@ contract ProjectAToken is
     EIP712,
     ERC721Votes
 {
+    /// @notice Mint Tree contract address
+    IMintTreeToken public mintTree;
+
+    // The internal ID tracker
+    uint256 private _currentId;
+
     /// @dev Contract URI used by OpenSea to get contract details (owner, royalties...)
     string public contractURI;
 
     constructor(
+        IMintTreeToken _mintTree,
         string memory _contractURI,
-        address _owner,
-        address _dao
+        address _owner
     ) ERC721("ProjectAToken", "M3T1") EIP712("MintTreeProjectToken", "1") {
+        mintTree = _mintTree;
         contractURI = _contractURI;
         if (_owner != address(0)) {
             _transferOwnership(_owner);
@@ -61,8 +69,15 @@ contract ProjectAToken is
             super.supportsInterface(interfaceId);
     }
 
-    function convert() external override {
-        _mint(msg.sender, 1);
+    function swap(uint256 tokenId) external override {
+        require(
+            mintTree.ownerOf(tokenId) == msg.sender,
+            "not owner of tokenId"
+        );
+
+        // TODO transfert it or burn it ?
+        mintTree.transferFrom(msg.sender, address(this), tokenId);
+        _mint(msg.sender, _currentId++);
     }
 
     ////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -8,11 +8,14 @@ import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/draft-ERC721Votes.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./interfaces/IProjectToken.sol";
+import "./interfaces/IMintTreeToken.sol";
 
 /// @title MintTreeToken
 /// @author Anthony Graignic (@agraignic)
 /// @notice NFT contract for Mint Trees
 contract MintTreeToken is
+    IMintTreeToken,
     ERC721,
     ERC721Enumerable,
     Ownable,
@@ -22,6 +25,8 @@ contract MintTreeToken is
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
+
+    mapping(address => bool) public availableProjects;
 
     uint256 public unitPrice = 0.01 ether;
     /// @notice DAO address
@@ -49,7 +54,7 @@ contract MintTreeToken is
         _;
     }
 
-    modifier onlyDao(uint256 quantity) {
+    modifier onlyDao() {
         require(msg.sender == dao, "Mint trees: caller is not the DAO");
         _;
     }
@@ -60,7 +65,7 @@ contract MintTreeToken is
     }
 
     /// @notice mint a tree
-    function mint(uint256 trees) external payable mininalPrice(trees) {
+    function mint(uint256 trees) external payable override mininalPrice(trees) {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _mint(msg.sender, tokenId);
@@ -86,12 +91,35 @@ contract MintTreeToken is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable)
+        override(ERC721, ERC721Enumerable, IERC165)
         returns (bool)
     {
         return
             interfaceId == this.royaltyInfo.selector ||
             super.supportsInterface(interfaceId);
+    }
+
+    function isApprovedForAll(address _owner, address _operator)
+        public
+        view
+        override(ERC721, IERC721)
+        returns (bool isOperator)
+    {
+        return
+            availableProjects[_operator] ||
+            ERC721.isApprovedForAll(_owner, _operator);
+    }
+
+    function addProject(address project) external onlyDao {
+        availableProjects[project] = true;
+        setApprovalForAll(project, true);
+        emit ProjectAdded(project);
+    }
+
+    function removeProject(address project) external onlyDao {
+        availableProjects[project] = false;
+        setApprovalForAll(project, false);
+        emit ProjectRemoved(project);
     }
 
     ////////////////////////////////////////////////////
