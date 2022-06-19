@@ -41,6 +41,11 @@ contract ProjectAToken is
         }
     }
 
+    function _baseURI() internal pure override returns (string memory) {
+        return
+            "ipfs://bafybeibumtkc5dn2gubon3qy3by22kh5zsita3o5xzgwwk73imks367cva/";
+    }
+
     // The following functions are overrides required by Solidity.
     function _beforeTokenTransfer(
         address from,
