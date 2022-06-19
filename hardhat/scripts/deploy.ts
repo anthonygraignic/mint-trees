@@ -24,6 +24,17 @@ async function main() {
   await mintTreeToken.deployed();
 
   console.log("mintTreeToken deployed to:", mintTreeToken.address);
+
+  const ProjectAToken = await ethers.getContractFactory("ProjectAToken");
+  const projectAToken = await ProjectAToken.deploy(
+    mintTreeToken.address,
+    process.env.CONTRACT_URI || "",
+    process.env.CONTRACT_OWNER || ethers.constants.AddressZero
+  );
+
+  await projectAToken.deployed();
+
+  console.log("projectAToken deployed to:", projectAToken.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
