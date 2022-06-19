@@ -1,0 +1,10 @@
+// WORKAROUND FOR DEPLOYMENT
+export const vars = {
+	DEV: import.meta.env.DEV,
+	PROD: import.meta.env.PROD,
+	MINTTREES_CONTRACT_ADDRESS: import.meta.env.VITE_MINTTREES_CONTRACT_ADDRESS,
+	PROJA_CONTRACT_ADDRESS: import.meta.env.VITE_PROJA_CONTRACT_ADDRESS,
+	EXPLORER_URL: import.meta.env.VITE_EXPLORER_URL || '',
+	CHAIN_ID: import.meta.env.VITE_CHAIN_ID || 80001,
+	COVALENT_API_KEY: import.meta.env.VITE_COVALENT_API_KEY
+};

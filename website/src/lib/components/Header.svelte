@@ -13,7 +13,7 @@
 
 <header>
 	<nav class:state--open={navOpen} on:keydown={handleEscapeWindow}>
-		<a class="brand" href="/" aria-label="Go to homepage">
+		<a class="brand" href="/" aria-label="Go to homepage"
 			<img src="/favicon.png" class="logo mr-auto sm:h-12 h-6 dark:invert" alt="logo" />
 			<span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
 				>mint trees</span
