@@ -1,6 +1,6 @@
 <script>
-	import { signerAddress, connect, connectAccount } from '$lib/wallet';
-
+	import { signerAddress, chainId, connect, connectAccount } from '$lib/wallet';
+	import { vars } from '$lib/env-variables';
 	export let error = undefined;
 
 	async function connectWeb3() {
@@ -14,7 +14,11 @@
 </script>
 
 {#if $signerAddress}
-	<slot />
+	{#if parseInt($chainId, 16) == vars.CHAIN_ID}
+		<slot />
+	{:else}
+		<p class="text-red-500">Please switch to Mumbai network</p>
+	{/if}
 {:else}
 	<div class="wrapper">
 		<button type="button" on:click={connectWeb3}>

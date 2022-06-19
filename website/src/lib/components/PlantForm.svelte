@@ -1,6 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
-
+	import { vars } from '$lib/env-variables';
 	import { signerAddress } from '$lib/wallet';
 	import { getUnitPrice, mint } from '$lib/minttrees';
 
@@ -70,7 +70,7 @@
 				<label
 					for="unitPrice"
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-					>USDC per tree</label
+					>MATIC per tree</label
 				>
 				<input
 					type="number"
@@ -82,7 +82,7 @@
 				/>
 			</div>
 
-			<p>Total: {trees ? (trees * unitPrice).toFixed(2) : '0'} USDC</p>
+			<p>Total: {trees ? (trees * unitPrice).toFixed(2) : '0'} MATIC</p>
 
 			<OnlyConnected bind:error
 				><button
@@ -126,7 +126,7 @@
 					See {txConfirmed ? '' : 'pending'} transaction
 					<a
 						class="underline"
-						href="{import.meta.env.VITE_EXPLORER_URL}/tx/{txHash}"
+						href="{vars.EXPLORER_URL}/tx/{txHash}"
 						rel="external noopener"
 						target="_blank">{txHash}</a
 					>

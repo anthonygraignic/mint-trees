@@ -1,7 +1,15 @@
-import jsonABI from './abis/MintTreeToken.json';
+import { vars } from '$lib/env-variables';
+import jsonMintTree from './abis/MintTreeToken.json';
+import jsonProject from './abis/ProjectAToken.json';
 
-export default {
-	address: import.meta.env.VITE_CONTRACT_ADDRESS,
-	chainId: import.meta.env.VITE_CHAIN_ID,
-	abi: jsonABI.abi
+export const minttrees = {
+	address: vars.MINTTREES_CONTRACT_ADDRESS,
+	chainId: vars.CHAIN_ID,
+	abi: jsonMintTree.abi
+};
+
+export const projectA = {
+	address: vars.PROJA_CONTRACT_ADDRESS,
+	chainId: vars.CHAIN_ID,
+	abi: jsonProject.abi
 };

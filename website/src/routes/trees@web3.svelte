@@ -4,6 +4,9 @@
 	import OnlyConnected from '../lib/components/OnlyConnected.svelte';
 	import ProjectCard from '../lib/components/projects/ProjectCard.svelte';
 
+	import { signerAddress } from '$lib/wallet';
+	import { getMintTreesContract, swap, getFirstTokenIdOwned } from '$lib/minttrees';
+
 	const title = 'Projects | mint trees';
 	const description = 'Trees projects';
 
@@ -35,7 +38,7 @@
 	];
 
 	let error = undefined;
-
+	let hasMintTreeToken = false;
 	let yourProjects = [
 		{
 			name: 'Mangrove planting in Madagascar',
@@ -44,6 +47,25 @@
 				'https://offsetearth.imgix.net/app/uploads/20191101094125/IMG_7190-1024x765.jpg?w=600&auto=format'
 		}
 	];
+
+	signerAddress.subscribe(async (signerAddress) => {
+		if (signerAddress) {
+			error = undefined;
+			hasMintTreeToken = (await getMintTreesContract().balanceOf(signerAddress)) > 0;
+		}
+	});
+
+	$: canSwap = $signerAddress && hasMintTreeToken;
+
+	async function swapTrees() {
+		try {
+			const tokenId = await getFirstTokenIdOwned($signerAddress);
+			await swap(tokenId);
+		} catch (err) {
+			console.log(err);
+			error = err;
+		}
+	}
 </script>
 
 <SvelteSeo
@@ -79,14 +101,28 @@
 		<ErrorComponent bind:error>
 			<OnlyConnected bind:error>
 				<div class="grid grid-flow-col auto-rows-fr auto-cols-fr gap-4">
-					{#each yourProjects as project}
-						<ProjectCard
-							title={project.name}
-							imgSrc={project.image}
-							description="🌳 {project.trees}"
-							vote={true}
-						/>
-					{/each}
+					{#if hasMintTreeToken}
+						{#each yourProjects as project}
+							<ProjectCard
+								title={project.name}
+								imgSrc={project.image}
+								description="🌳 {project.trees}"
+								canVote={true}
+								canSwap={false}
+							/>
+						{/each}
+					{:else}
+						<div class="flex flex-col mx-auto">
+							<p class="text-red-500">No Mint Trees token owned</p>
+							<a
+								href="/"
+								sveltekit:prefetch
+								class="py-2 px-3 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+							>
+								Buy one
+							</a>
+						</div>
+					{/if}
 				</div>
 			</OnlyConnected>
 		</ErrorComponent>
@@ -97,7 +133,14 @@
 		<h2>All projects</h2>
 		<div class="grid grid-flow-col auto-rows-fr auto-cols-fr gap-4">
 			{#each projects as project}
-				<ProjectCard title={project.name} imgSrc={project.image} description="🌳 {project.trees}" />
+				<ProjectCard
+					title={project.name}
+					imgSrc={project.image}
+					description="🌳 {project.trees}"
+					canVote={false}
+					{canSwap}
+					swap={swapTrees}
+				/>
 			{/each}
 		</div>
 	</section>

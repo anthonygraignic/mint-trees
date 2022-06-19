@@ -3,7 +3,10 @@
 	export let imgSrc = '/favicon.png';
 	export let title = 'Lorem Ipsum';
 	export let description;
-	export let vote;
+	export let canVote;
+	export let canSwap;
+
+	export let swap = () => {};
 </script>
 
 <div
@@ -29,13 +32,22 @@
 				Read more
 			</a>
 
-			{#if vote}
+			{#if canVote}
 				<a
-					href="/trees/{id}/vote"
+					href="https://snapshot.org/#/"
+					rel="external noopener"
+					target="_blank"
 					class="py-2 px-3 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
 				>
 					Vote
 				</a>
+			{:else if canSwap}
+				<button
+					on:click={swap}
+					class="py-2 px-3 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+				>
+					Swap
+				</button>
 			{/if}
 		</div>
 	</div>
